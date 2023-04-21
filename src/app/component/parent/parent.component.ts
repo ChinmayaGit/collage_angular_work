@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChildComponent } from '../child/child.component';
+import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
   selector: 'app-parent',
@@ -6,11 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./parent.component.scss']
 })
 export class ParentComponent implements OnInit {
+  @ViewChild(ChildComponent) childComponent: ChildComponent | undefined;
   property: any[] = [];
   ChildData: any;
-  constructor() { }
   xyzProperty: any[] = [];
+  constructor(private service: EmployeeService) { }
+
   ngOnInit() {
+    this.service.getData().subscribe(res => {
+      console.log(res);
+    }, error => {
+      console.log(error);
+    }
+    );
+    this.childComponent?.passGiftParent();
     this.property = [
       { name: 'John', cost: 1 },
       { name: 'Doe', cost: 2 },
